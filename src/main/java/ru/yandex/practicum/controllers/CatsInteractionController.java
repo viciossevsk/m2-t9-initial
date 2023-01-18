@@ -1,6 +1,8 @@
 package ru.yandex.practicum.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.Exceptions.ErrorResponse;
 import ru.yandex.practicum.Exceptions.IncorrectCountException;
 
 import java.util.Map;
@@ -61,10 +63,22 @@ public class CatsInteractionController {
         return Map.of("error", "Произошла ошибка!");
     }
 
+//    @ExceptionHandler
+//    public Map<String, String> handleIncorrectCount(IncorrectCountException e) {
+//        return Map.of("error", "Ошибка с параметром count.",
+//                      "errorMessage", e.getMessage());
+//    }
+
+
+    /***
+     * Частая практика — создание специального объекта для универсального формата ошибки
+     * Меняем код ответа через @ResponseStatus(HttpStatus.BAD_REQUEST)
+     */
     @ExceptionHandler
-    // добавьте сюда метод handleError по обработке RuntimeException
-    public Map<String, String> handleIncorrectCount(IncorrectCountException e) {
-        return Map.of("error", "Ошибка с параметром count.",
-                      "errorMessage", e.getMessage());
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handle(final IncorrectCountException e) {
+        return new ErrorResponse("error", "Ошибка с параметром count.");
+
     }
+
 }
