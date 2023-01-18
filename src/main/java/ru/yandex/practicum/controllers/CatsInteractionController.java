@@ -2,6 +2,7 @@ package ru.yandex.practicum.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.Exceptions.ErrorResponse;
 import ru.yandex.practicum.Exceptions.IncorrectCountException;
 
@@ -57,11 +58,11 @@ public class CatsInteractionController {
 //        return Map.of("Ошибка", "Отсутствует значение count");
 //    }
 
-    @ExceptionHandler
-    // добавьте сюда метод handleError по обработке RuntimeException
-    public Map<String, String> handleRunTimeError(RuntimeException e) {
-        return Map.of("error", "Произошла ошибка!");
-    }
+//    @ExceptionHandler
+//    // добавьте сюда метод handleError по обработке RuntimeException
+//    public Map<String, String> handleRunTimeError(RuntimeException e) {
+//        return Map.of("error", "Произошла ошибка!");
+//    }
 
 //    @ExceptionHandler
 //    public Map<String, String> handleIncorrectCount(IncorrectCountException e) {
@@ -78,7 +79,20 @@ public class CatsInteractionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handle(final IncorrectCountException e) {
         return new ErrorResponse("error", "Ошибка с параметром count.");
+    }
 
+
+    /***
+     * Существует ещё один способ быстро вернуть необходимый http-код при ошибке в приложении — с помощью исключения
+     * ResponseStatusException (англ. «исключение статуса ответа»). Это программный интерфейс к аннотации
+     * @ResponseStatus и базовый класс для исключений, который используется для применения статус-кода к http-ответу.
+     * Так как ResponseStatusException — непроверяемое исключение, в сигнатуру функции его описание добавлять не нужно.
+     * Например, если программист начал реализовывать какой-то метод, но не дописал его до конца, он может
+     * сгенерировать в нём исключение ResponseStatusException с кодом возврата 501 — «метод не реализован».
+     */
+    @GetMapping("/feed")
+    public Map<String, Integer> feed() {
+        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Метод /feed ещё не реализован.");
     }
 
 }
