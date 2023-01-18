@@ -89,6 +89,11 @@ public class CatsInteractionController {
      * Так как ResponseStatusException — непроверяемое исключение, в сигнатуру функции его описание добавлять не нужно.
      * Например, если программист начал реализовывать какой-то метод, но не дописал его до конца, он может
      * сгенерировать в нём исключение ResponseStatusException с кодом возврата 501 — «метод не реализован».
+     *
+     * В нём не фигурирует переданное дополнительное сообщение (reason). Это нужно настраивать отдельно:
+     * установить в application.properties параметр server.error.include-message=always. После чего
+     * ответ программы станет таким:
+     * "message":"Happiness not implemented",
      */
     @GetMapping("/feed")
     public Map<String, Integer> feed() {
